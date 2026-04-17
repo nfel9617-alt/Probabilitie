@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلسلة تمارين في الاحتمالات - منصة نوفل</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+            chtml: { scale: 1.1 } // تكبير المعادلات قليلاً لزيادة الوضوح
+        };
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --success-color: #059669;
+            --accent-color: #f59e0b;
+            --bg-color: #f8fafc;
+            --text-color: #1f2937;
+            --border-color: #cbd5e1;
+            --badge-color: #ef4444;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 2;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 4px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            background: #fff;
+            padding-top: 20px;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        header h1 { font-size: 28px; margin: 5px 0; font-weight: 800; color: var(--primary-color); }
+        header h2 { font-size: 18px; color: var(--secondary-color); margin: 5px 0; }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button.btn-sol { background-color: var(--success-color); }
+        button:hover { opacity: 0.85; transform: translateY(-2px); }
+
+        button.active-btn {
+            background-color: var(--accent-color);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+
+        .content-section {
+            display: none;
+            background: #fff;
+            padding: 35px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .content-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .exercise-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            background-color: var(--primary-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .sol-title { background-color: var(--success-color); }
+
+        .context-box {
+            background-color: #eff6ff;
+            border-right: 5px solid var(--primary-color);
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            font-size: 18px;
+        }
+
+        .questions-list {
+            list-style-type: decimal;
+            padding-right: 20px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .questions-list li { margin-bottom: 15px; }
+
+        .answer-list {
+            list-style-type: none;
+            padding: 0;
+            font-size: 18px;
+        }
+
+        .answer-list > li {
+            margin-bottom: 30px;
+            background: #f0fdf4;
+            padding: 20px;
+            border-right: 5px solid var(--success-color);
+            border-radius: 6px;
+        }
+
+        .math-block {
+            overflow-x: auto;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            border: 1px dashed #94a3b8;
+            text-align: center;
+        }
+
+        .points-badge {
+            background-color: var(--badge-color);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 15px;
+            display: inline-block;
+            direction: rtl;
+        }
+
+        .table-prob {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .table-prob th, .table-prob td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            font-size: 18px;
+        }
+
+        .table-prob th {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        /* إعدادات الطباعة */
+        @media print {
+            body { background-color: #fff; padding: 0; }
+            .container { max-width: 100%; box-shadow: none; }
+            .controls, header { display: none; }
+            .content-section { display: block !important; border: none; box-shadow: none; page-break-after: always; }
+            .answer-list > li { background: transparent; border-right: 2px solid #000; }
+            .math-block { border: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>منصة نوفل التعليمية - التحضير الممتاز للبكالوريا</h1>
+            <h2>سلسلة تمارين مقترحة في وحدة: الاحتمالات (مرفقة بالتصحيح المفصل)</h2>
+        </header>
+
+        <div class="controls">
+            <button id="btn-exercises" class="active-btn" onclick="showSection('exercises')">عرض نص التمارين</button>
+            <button id="btn-sol1" class="btn-sol" onclick="showSection('sol1')">حل التمرين الأول</button>
+            <button id="btn-sol2" class="btn-sol" onclick="showSection('sol2')">حل التمرين الثاني</button>
+            <button id="btn-sol3" class="btn-sol" onclick="showSection('sol3')">حل التمرين الثالث</button>
+            <button onclick="window.print()" style="background-color: #475569;">طباعة السلسلة 🖨️</button>
+        </div>
+
+        <div id="exercises" class="content-section active">
+            
+            <div class="exercise-title">التمرين الأول: السحب من الصندوق <span>(07 نقاط)</span></div>
+            <div class="context-box">
+                يحتوي صندوق \( U \) على 10 كرات متماثلة لا نفرق بينها باللمس، موزعة كما يلي: <br>
+                - 5 كرات بيضاء (Blanc).<br>
+                - 3 كرات حمراء (Rouge).<br>
+                - كرتان خضراوان (Vert).<br>
+                نسحب عشوائياً وفي آن واحد 3 كرات من الصندوق.
+            </div>
+            <ol class="questions-list">
+                <li>احسب احتمال الحوادث التالية:
+                    <ul>
+                        <li>\( A \): "الكرات الثلاث المسحوبة من نفس اللون".</li>
+                        <li>\( B \): "الحصول على كرة حمراء واحدة على الأقل".</li>
+                        <li>\( C \): "الكرات الثلاث المسحوبة مختلفة الألوان مثنى مثنى".</li>
+                    </ul>
+                </li>
+                <li>ليكن المتغير العشوائي \( X \) الذي يرفق بكل سحبة عدد الكرات الحمراء المسحوبة.
+                    <ul>
+                        <li>أ) برر أن القيم الممكنة للمتغير \( X \) هي: \( \{0, 1, 2, 3\} \).</li>
+                        <li>ب) عرّف قانون الاحتمال للمتغير العشوائي \( X \).</li>
+                        <li>ج) احسب الأمل الرياضي \( E(X) \) والتباين \( V(X) \).</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <hr style="margin: 40px 0; border: 1px solid #e2e8f0;">
+
+            <div class="exercise-title">التمرين الثاني: الاحتمالات الشرطية <span>(06 نقاط)</span></div>
+            <div class="context-box">
+                ينتج مصنع للهواتف الذكية أجهزته باستخدام ثلاث آلات \( M_1 \)، \( M_2 \)، و \( M_3 \). <br>
+                - الآلة \( M_1 \) تنتج %50 من الهواتف.<br>
+                - الآلة \( M_2 \) تنتج %30 من الهواتف.<br>
+                - الآلة \( M_3 \) تنتج %20 من الهواتف.<br>
+                تبين من خلال المراقبة أن نسبة الهواتف المعيبة (غير الصالحة) هي: %2 من إنتاج \( M_1 \)، و %3 من إنتاج \( M_2 \)، و %4 من إنتاج \( M_3 \). <br>
+                نختار عشوائياً هاتفاً من إنتاج المصنع. نرمز بـ \( D \) لحادثة "الهاتف معيب".
+            </div>
+            <ol class="questions-list" start="1">
+                <li>شكّل شجرة الاحتمالات التي تنمذج هذه الوضعية.</li>
+                <li>احسب احتمال أن يكون الهاتف المختار معيباً أي \( P(D) \).</li>
+                <li>إذا علمنا أن الهاتف المختار معيب، فما هو احتمال أن يكون من إنتاج الآلة \( M_1 \)؟</li>
+                <li>نختار عشوائياً 4 هواتف من الإنتاج الكلي (نعتبر الاختيار كأنه سحب مع الإرجاع). ما هو احتمال أن نجد هاتفاً معيباً واحداً على الأقل من بين الهواتف الأربعة؟</li>
+            </ol>
+
+            <hr style="margin: 40px 0; border: 1px solid #e2e8f0;">
+
+            <div class="exercise-title">التمرين الثالث: الألعاب والأمل الرياضي <span>(07 نقاط)</span></div>
+            <div class="context-box">
+                يشارك لاعب في لعبة تعتمد على رمي زهر نرد مكعب متوازن، وجوهه مرقمة من 1 إلى 6. <br>
+                قواعد اللعبة كما يلي:<br>
+                - إذا ظهر الرقم 6، يربح اللاعب 10 نقاط.<br>
+                - إذا ظهر رقم زوجي يختلف عن 6 (أي 2 أو 4)، يربح اللاعب 5 نقاط.<br>
+                - إذا ظهر رقم فردي (1، 3، أو 5)، يخسر اللاعب \( k \) نقطة (حيث \( k \) عدد حقيقي موجب تماماً).<br>
+                نسمي \( Y \) المتغير العشوائي الذي يمثل عدد النقاط التي يتحصل عليها اللاعب في رمية واحدة (الخسارة تحسب كقيمة سالبة).
+            </div>
+            <ol class="questions-list" start="1">
+                <li>عين القيم الممكنة للمتغير العشوائي \( Y \) بدلالة \( k \).</li>
+                <li>اكتب قانون الاحتمال للمتغير \( Y \).</li>
+                <li>بين أن الأمل الرياضي يكتب على الشكل: \( E(Y) = \frac{20 - 3k}{6} \).</li>
+                <li>عين قيمة العدد الحقيقي \( k \) حتى تكون اللعبة عادلة.</li>
+                <li>نضع \( k = 5 \). يقوم اللاعب برمي النرد 3 مرات متتالية. ما هو احتمال أن يتحصل على مجموع نقاط معدوم (0 نقطة) في النهاية؟</li>
+            </ol>
+        </div>
+
+        <div id="sol1" class="content-section">
+            <div class="exercise-title sol-title">التصحيح النموذجي: التمرين الأول <span>(07 نقاط)</span></div>
+            
+            <ul class="answer-list">
+                <li><strong>تحديد عدد الحالات الممكنة:</strong>
+                    <span class="step">بما أن السحب يتم "في آن واحد" لـ 3 كرات من أصل 10، فنحن نستعمل التوفيقات \( C_n^p \).</span>
+                    <div class="math-block">
+                        \[ \text{Card}(\Omega) = C_{10}^3 = \frac{10 \times 9 \times 8}{3 \times 2 \times 1} = 120 \text{ حالة ممكنة} \]
+                    </div>
+                </li>
+                
+                <li><strong>1. حساب احتمالات الحوادث:</strong> <span class="points-badge">3.0 ن</span>
+                    <span class="step"><strong>- الحادثة \( A \):</strong> (3 بيضاء) أو (3 حمراء) لأن الخضراء عددها 2 فلا يمكن سحب 3 منها.</span>
+                    <div class="math-block">
+                        \[ P(A) = \frac{C_5^3 + C_3^3}{120} = \frac{10 + 1}{120} = \frac{11}{120} \]
+                    </div>
+                    
+                    <span class="step"><strong>- الحادثة \( B \):</strong> (حمراء واحدة على الأقل). نستعمل الحادثة العكسية \( \overline{B} \): "عدم سحب أي كرة حمراء" أي سحب 3 كرات من الباقي (7 كرات).</span>
+                    <div class="math-block">
+                        \[ P(B) = 1 - P(\overline{B}) = 1 - \frac{C_7^3}{120} = 1 - \frac{35}{120} = \frac{85}{120} = \frac{17}{24} \]
+                    </div>
+
+                    <span class="step"><strong>- الحادثة \( C \):</strong> (الكرات مختلفة الألوان مثنى مثنى) أي سحب (1 بيضاء و 1 حمراء و 1 خضراء).</span>
+                    <div class="math-block">
+                        \[ P(C) = \frac{C_5^1 \times C_3^1 \times C_2^1}{120} = \frac{5 \times 3 \times 2}{120} = \frac{30}{120} = \frac{1}{4} \]
+                    </div>
+                </li>
+
+                <li><strong>2. المتغير العشوائي \( X \):</strong> <span class="points-badge">4.0 ن</span>
+                    <span class="step"><strong>أ) التبرير:</strong> \( X \) يمثل عدد الكرات الحمراء المسحوبة. بما أن الصندوق به 3 كرات حمراء ونسحب 3 كرات فيمكن أن لا نسحب أي كرة حمراء (0)، أو كرة واحدة (1)، أو كرتين (2)، أو ثلاثة (3). إذن: \( X(\Omega) = \{0, 1, 2, 3\} \).</span>
+                    
+                    <span class="step"><strong>ب) قانون الاحتمال:</strong></span>
+                    <div class="math-block">
+                        \[ P(X=0) = \frac{C_7^3}{120} = \frac{35}{120} \]
+                        \[ P(X=1) = \frac{C_3^1 \times C_7^2}{120} = \frac{3 \times 21}{120} = \frac{63}{120} \]
+                        \[ P(X=2) = \frac{C_3^2 \times C_7^1}{120} = \frac{3 \times 7}{120} = \frac{21}{120} \]
+                        \[ P(X=3) = \frac{C_3^3 \times C_7^0}{120} = \frac{1 \times 1}{120} = \frac{1}{120} \]
+                    </div>
+                    <span class="step">للتأكد: \( 35 + 63 + 21 + 1 = 120 \). (الجدول ضروري في ورقة الإجابة).</span>
+
+                    <span class="step"><strong>ج) الأمل الرياضي والتباين:</strong></span>
+                    <div class="math-block">
+                        \[ E(X) = \sum x_i P(X=x_i) = 0\left(\frac{35}{120}\right) + 1\left(\frac{63}{120}\right) + 2\left(\frac{21}{120}\right) + 3\left(\frac{1}{120}\right) = \frac{108}{120} = \frac{9}{10} = 0.9 \]
+                        \[ E(X^2) = 0^2\left(\frac{35}{120}\right) + 1^2\left(\frac{63}{120}\right) + 2^2\left(\frac{21}{120}\right) + 3^2\left(\frac{1}{120}\right) = \frac{0 + 63 + 84 + 9}{120} = \frac{156}{120} = 1.3 \]
+                        \[ V(X) = E(X^2) - [E(X)]^2 = 1.3 - (0.9)^2 = 1.3 - 0.81 = 0.49 \]
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div id="sol2" class="content-section">
+            <div class="exercise-title sol-title">التصحيح النموذجي: التمرين الثاني <span>(06 نقاط)</span></div>
+            
+            <ul class="answer-list">
+                <li><strong>1. شجرة الاحتمالات:</strong> <span class="points-badge">1.5 ن</span>
+                    <span class="step">تشكيل الشجرة بناءً على المعطيات:</span>
+                    <span class="step">- الفروع الأولى (الآلات): \( P(M_1) = 0.5 \)، \( P(M_2) = 0.3 \)، \( P(M_3) = 0.2 \).</span>
+                    <span class="step">- الفروع الثانوية (نسبة العيب): \( P(D|M_1) = 0.02 \)، \( P(D|M_2) = 0.03 \)، \( P(D|M_3) = 0.04 \).</span>
+                </li>
+
+                <li><strong>2. حساب \( P(D) \) (دستور الاحتمال الكلي):</strong> <span class="points-badge">1.5 ن</span>
+                    <div class="math-block">
+                        \[ P(D) = P(M_1 \cap D) + P(M_2 \cap D) + P(M_3 \cap D) \]
+                        \[ P(D) = P(M_1)P(D|M_1) + P(M_2)P(D|M_2) + P(M_3)P(D|M_3) \]
+                        \[ P(D) = (0.5 \times 0.02) + (0.3 \times 0.03) + (0.2 \times 0.04) \]
+                        \[ P(D) = 0.010 + 0.009 + 0.008 = 0.027 \]
+                    </div>
+                </li>
+
+                <li><strong>3. حساب \( P(M_1|D) \) (مبرهنة بايز):</strong> <span class="points-badge">1.5 ن</span>
+                    <span class="step">المطلوب هو احتمال أن يكون الهاتف من الآلة \( M_1 \) علماً أنه معيب:</span>
+                    <div class="math-block">
+                        \[ P(M_1|D) = \frac{P(M_1 \cap D)}{P(D)} = \frac{0.010}{0.027} = \frac{10}{27} \approx 0.37 \]
+                    </div>
+                </li>
+
+                <li><strong>4. سحب 4 هواتف (توزيع ذو الحدين):</strong> <span class="points-badge">1.5 ن</span>
+                    <span class="step">السحب مع الإرجاع يمثل تجربة برنولي مكررة 4 مرات (\( n=4 \)). احتمال النجاح (معيب) هو \( p = P(D) = 0.027 \).</span>
+                    <span class="step">احتمال "هاتف معيب واحد على الأقل" هو الحادثة العكسية لـ "لا يوجد أي هاتف معيب".</span>
+                    <div class="math-block">
+                        \[ P(Z \ge 1) = 1 - P(Z = 0) = 1 - C_4^0 (0.027)^0 (1 - 0.027)^4 \]
+                        \[ P(Z \ge 1) = 1 - (0.973)^4 \approx 1 - 0.896 = 0.104 \]
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div id="sol3" class="content-section">
+            <div class="exercise-title sol-title">التصحيح النموذجي: التمرين الثالث <span>(07 نقاط)</span></div>
+            
+            <ul class="answer-list">
+                <li><strong>1. القيم الممكنة لـ \( Y \):</strong> <span class="points-badge">1.0 ن</span>
+                    <span class="step">حسب قواعد اللعبة: ظهور 6 يعطي 10، ظهور زوجي آخر (2، 4) يعطي 5، الفردي (1، 3، 5) يعطي \( -k \).</span>
+                    <div class="math-block">
+                        \[ Y(\Omega) = \{10, 5, -k\} \]
+                    </div>
+                </li>
+
+                <li><strong>2. قانون الاحتمال:</strong> <span class="points-badge">1.5 ن</span>
+                    <span class="step">النرد متوازن، احتمال كل وجه هو \( 1/6 \).</span>
+                    <table class="table-prob">
+                        <tr>
+                            <th>\( y_i \)</th>
+                            <td>10</td>
+                            <td>5</td>
+                            <td>\( -k \)</td>
+                        </tr>
+                        <tr>
+                            <th>\( P(Y = y_i) \)</th>
+                            <td>\( \frac{1}{6} \) (للوجه 6)</td>
+                            <td>\( \frac{2}{6} \) (للوجهين 2، 4)</td>
+                            <td>\( \frac{3}{6} \) (للوجوه 1، 3، 5)</td>
+                        </tr>
+                    </table>
+                </li>
+
+                <li><strong>3. إثبات عبارة الأمل الرياضي:</strong> <span class="points-badge">1.5 ن</span>
+                    <div class="math-block">
+                        \[ E(Y) = \sum y_i P(Y=y_i) = 10\left(\frac{1}{6}\right) + 5\left(\frac{2}{6}\right) - k\left(\frac{3}{6}\right) \]
+                        \[ E(Y) = \frac{10 + 10 - 3k}{6} = \frac{20 - 3k}{6} \]
+                    </div>
+                    <span class="step">وهو المطلوب.</span>
+                </li>
+
+                <li><strong>4. تعيين \( k \) لتكون اللعبة عادلة:</strong> <span class="points-badge">1.0 ن</span>
+                    <span class="step">اللعبة عادلة تعني الأمل الرياضي معدوم \( E(Y) = 0 \).</span>
+                    <div class="math-block">
+                        \[ \frac{20 - 3k}{6} = 0 \implies 20 - 3k = 0 \implies 3k = 20 \implies k = \frac{20}{3} \]
+                    </div>
+                </li>
+
+                <li><strong>5. رمي النرد 3 مرات مع \( k = 5 \):</strong> <span class="points-badge">2.0 ن</span>
+                    <span class="step">إذا كان \( k=5 \) تصبح القيم: \( \{10, 5, -5\} \).</span>
+                    <span class="step">نبحث عن احتمال مجموع معدوم في 3 رميات أي \( y_1 + y_2 + y_3 = 0 \).</span>
+                    <span class="step">الحالة الوحيدة لتحقيق المجموع 0 من القيم المتاحة هي الحصول على: (10 مرة واحدة) و (-5 مرتين). لأن \( 10 - 5 - 5 = 0 \).</span>
+                    <span class="step">بما أن الترتيب مهم (يمكن أن تظهر الـ 10 في الرمية الأولى أو الثانية أو الثالثة)، نضرب في معامل الترتيب \( C_3^1 = 3 \).</span>
+                    <div class="math-block">
+                        \[ P(S=0) = 3 \times P(Y=10) \times P(Y=-5) \times P(Y=-5) \]
+                        \[ P(S=0) = 3 \times \left(\frac{1}{6}\right) \times \left(\frac{3}{6}\right) \times \left(\frac{3}{6}\right) = 3 \times \frac{1}{6} \times \frac{1}{2} \times \frac{1}{2} = \frac{3}{24} = \frac{1}{8} = 0.125 \]
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // إخفاء جميع الأقسام
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            // إزالة اللون النشط من الأزرار
+            document.querySelectorAll('.controls button').forEach(btn => {
+                btn.classList.remove('active-btn');
+            });
+            
+            // تفعيل القسم والزر المطلوبين
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active-btn');
+        }
+    </script>
+</body>
+</html>
